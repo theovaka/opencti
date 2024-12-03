@@ -471,6 +471,44 @@ services:
     restart: always
     depends_on:
       - opencti
+
+  connector-crowdstrike:
+    image: opencti/connector-crowdstrike:6.4.2
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=12b8a795-a41e-4179-a921-c92e60046572
+      - CONNECTOR_NAME=CrowdStrike
+      - CONNECTOR_SCOPE=crowdstrike
+      - CONNECTOR_LOG_LEVEL=error
+      - CONNECTOR_DURATION_PERIOD=PT30M # In ISO 8601 format, starting with "P" for period
+      - CROWDSTRIKE_BASE_URL=https://api.eu-1.crowdstrike.com
+      - CROWDSTRIKE_CLIENT_ID=76b42d2af47b40d4989e9bc9e0ca447c
+      - CROWDSTRIKE_CLIENT_SECRET=9kWv3ba687d5pzA2rjEywtYJ40eTBPIZMshlnmu1
+      - CROWDSTRIKE_TLP=Amber
+      - CROWDSTRIKE_CREATE_OBSERVABLES=true
+      - CROWDSTRIKE_CREATE_INDICATORS=true
+      - CROWDSTRIKE_SCOPES=actor,report,indicator,yara_master
+      - CROWDSTRIKE_ACTOR_START_TIMESTAMP=0
+      - CROWDSTRIKE_REPORT_START_TIMESTAMP=0 # BEWARE! A lot of reports!
+      - CROWDSTRIKE_REPORT_STATUS=New
+      - CROWDSTRIKE_REPORT_INCLUDE_TYPES=notice,tipper,intelligence report,periodic report
+      - CROWDSTRIKE_REPORT_TYPE=threat-report
+      - CROWDSTRIKE_REPORT_TARGET_INDUSTRIES= # Can be used to retrieve only reports related to a sector
+      - CROWDSTRIKE_REPORT_GUESS_MALWARE=false # Use report tags to guess malware
+      - CROWDSTRIKE_INDICATOR_START_TIMESTAMP=0 # BEWARE! A lot of indicators!
+      - CROWDSTRIKE_INDICATOR_EXCLUDE_TYPES=hash_ion,hash_md5,hash_sha1
+      - CROWDSTRIKE_DEFAULT_X_OPENCTI_SCORE=50
+      - CROWDSTRIKE_INDICATOR_LOW_SCORE=40
+      - CROWDSTRIKE_INDICATOR_LOW_SCORE_LABELS=MaliciousConfidence/Low
+      - CROWDSTRIKE_INDICATOR_MEDIUM_SCORE=60
+      - CROWDSTRIKE_INDICATOR_MEDIUM_SCORE_LABELS=MaliciousConfidence/Medium
+      - CROWDSTRIKE_INDICATOR_HIGH_SCORE=80
+      - CROWDSTRIKE_INDICATOR_HIGH_SCORE_LABELS=MaliciousConfidence/High
+      - CROWDSTRIKE_INDICATOR_UNWANTED_LABELS= # Can be used to filter low confidence indicators: "MaliciousConfidence/Low", "MaliciousConfidence/Medium"
+    restart: always
+    depends_on:
+    - opencti
         
 volumes:
   esdata:
